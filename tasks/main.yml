@@ -21,10 +21,10 @@
     validate_certs=no
   register: get_ocsinventory_agent
 
--name: debug download
- debug:
-   msg: "ocsinventory agent was downloaded"
-   when: get_ocsinventoryagent|changed
+- name: debug download
+  debug:
+    msg: "ocsinventory agent was downloaded"
+    when: get_ocsinventoryagent|changed
 
 - name: uncompress the tarball
   unarchive: >
