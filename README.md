@@ -3,7 +3,8 @@ ansible-ocs
 
 An Ansible role for installing ocsinventory-agent.
 
-This role only works with the ocsinventory-agent 2.1 or later.
+This role only works with the ocsinventory-agent 2.1 or later to let the agent be installed non-interactively (http://wiki.ocsinventory-ng.org/index.php/Documentation:UnixAgent).
+
 Tested on:
 - Debian 7
 - CentOS 6
