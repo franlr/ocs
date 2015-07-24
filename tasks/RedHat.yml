@@ -2,6 +2,6 @@
 
 - name: install the required packages in RedHat derivatives
   yum: name="{{ item }}" state=installed
-  with_items: "{{ ocs_reqs }}"
+  with_items: "{{ ocs_pkgreqs }}"
   tags:
     - ocs_pkgreqs
