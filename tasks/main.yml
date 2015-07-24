@@ -1,2 +1,49 @@
 ---
 # tasks file for ocs
+
+- name: add the OS specific varibles
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- { include: Debian.yml, when: "ansible_os_family == 'Debian'" }
+- { include: RedHat.yml, when: "ansible_os_family == 'RedHat'" }
+
+- name: initialize CPAN installation
+  command: perl -MCPAN -e 'my $c = "CPAN::HandleConfig"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => "follow"); $c->edit(build_requires_install_policy => "yes"); $c->com$
+
+- name: installs Digest::MD5 using CPAN
+  command: "/usr/bin/perl -MCPAN -e 'install Digest::MD5'"
+
+- name: download tarball
+  get_url: >
+    url="{{ ocs_down_url }}"/"{{ ocs_pkg }}"
+    dest="{{ ocs_down_dir }}"
+    force=no
+    validate_certs=no
+  register: get_ocsinventory_agent
+
+-name: debug download
+ debug:
+   msg: "ocsinventory agent was downloaded"
+   when: get_ocsinventoryagent|changed
+
+- name: uncompress the tarball
+  unarchive: >
+    src="{{ ocs_down_dir }}"/"{{ ocs_pkg }}" 
+    dest=/opt/
+    copy=no
+    mode=0755
+    owner=root
+    group=root
+
+- name: silent install ocs agent on target dir using COMMAND module
+  command: "chdir=/opt/{{ ocs_name }}-{{ ocs_version }} {{ item }}"
+  with_items:
+    - perl Makefile.PL
+    - make
+    - make install clean
+    - perl postinst.pl --nowizard --server=http://{{ ocs_server }} --basevardir={{ ocs_basedir}} --configdir={{ ocs_configdir}} --tag={{ ocs_tag }} --logfile={{ ocs_logfile }} {{ ocs_options }}
+  environment:
+    PATH: /usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/lib:/usr/local/lib:/opt:{{ ansible_env.PATH }}
+    PERL_AUTOINSTALL: 1
+  tags:
+    - ocs_install_command

@@ -1,0 +1,7 @@
+---
+
+- name: install the required packages
+  apt: name="{{ item }}" state=installed update_cache=yes
+  with_items: "{{ ocs_reqs }}"
+  tags:
+    - ocs_pkgreqs

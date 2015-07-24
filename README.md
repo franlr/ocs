@@ -12,23 +12,48 @@ Tested on:
 Requirements
 ------------
 
-
+None.
+ 
 Role Variables
 --------------
 
 A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
 
+Available variables are listed below, along with default values (see `defaults/main.yml`):
+
+```
+ocs_name: Ocsinventory-Unix-Agent
+ocs_version: 2.1
+ocs_pkg: Ocsinventory-Unix-Agent-{ocs_version}.tar.gz
+ocs_pkgreqs: (see `vars/{{ ansible_os_family }}.yml
+ocs_down_dir: /tmp
+ocs_down_url: https://launchpad.net/ocsinventory-unix-agent/stable-{ocs_version}/{ocs_version}/+download/
+ocs_server: ocsinventory-server.domain.name
+ocs_basedir: /var/lib/ocsinventory-agent
+ocs_configdir: /etc/ocsinventory
+ocs_tag: srvtype
+ocs_logfile: /var/log/ocsinventory-agent.log
+ocs_options: --crontab --remove-old-linux-agent --debug --nossl --download --snmp --now
+```
+
 Dependencies
 ------------
+
+Development tools and perl dependencies are included into roles's requirements. This role installs and uses CPAN to install perl 'Digest::MD5'.
 
 Example Playbook
 ----------------
 
 How to use this role:
 
-    - hosts: servers
-      roles:
-         - { role: franlr.ocs, ocs_server: ocsinventoryserver.domain.name, ocs_tagname: production }
+``` yml
+---
+- hosts: all
+  gather_facts: true
+  sudo: no
+  user: root
+  roles:
+    - { role: "franlr.ocs", ocs_server: "your-ocsinventory-server.domain.name", ocs_tag: "your-tag" }
 
 License
 -------
@@ -38,3 +63,4 @@ Apache v2.0
 Author Information
 ------------------
 
+This role was created in 2015 by [FranLR](https://github.com/franlr/)

@@ -1,0 +1,21 @@
+---
+
+ocs_pkgreqs:
+  - build-essential
+  - perl
+  - perl-modules
+  - dmidecode
+  - libxml-simple-perl
+  - libnet-ip-perl
+  - libwww-perl
+  - libdigest-md5-perl
+  - libnet-ssleay-perl
+  - libcrypt-ssleay-perl
+  - libnet-snmp-perl
+  - libproc-pid-file-perl
+  - libproc-daemon-perl
+  - net-tools
+  - libsys-syslog-perl
+  - pciutils
+  - smartmontools
+  - read-edid
