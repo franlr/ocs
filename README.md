@@ -54,6 +54,7 @@ How to use this role:
   user: root
   roles:
     - { role: "franlr.ocs", ocs_server: "your-ocsinventory-server.domain.name", ocs_tag: "your-tag" }
+```
 
 License
 -------
