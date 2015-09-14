@@ -1,6 +1,8 @@
 ansible-ocs
 =========
 
+[![Ansible Galaxy](https://img.shields.io/badge/galaxy-franlr--ocs-blue.svg)](https://galaxy.ansible.com/list#/roles/4468)
+
 An Ansible role for installing ocsinventory-agent.
 
 This role only works with the ocsinventory-agent 2.1 or later to let the agent be installed non-interactively (http://wiki.ocsinventory-ng.org/index.php/Documentation:UnixAgent).
