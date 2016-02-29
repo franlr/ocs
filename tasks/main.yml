@@ -36,7 +36,7 @@
     group=root
 
 - name: silent install ocs agent on target dir using COMMAND module
-  command: "chdir=/opt/{{ ocs_name }}-{{ ocs_version }} {{ item }}"
+  command: "chdir=/opt/{{ ocs_name }}-{{ ocs_agent_version }} {{ item }}"
   with_items:
     - perl Makefile.PL
     - make
