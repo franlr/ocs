@@ -25,11 +25,12 @@ Available variables are listed below, along with default values (see `defaults/m
 
 ```
 ocs_name: Ocsinventory-Unix-Agent
-ocs_version: 2.1
-ocs_pkg: Ocsinventory-Unix-Agent-{ocs_version}.tar.gz
+ocs_stable_version: 2.1
+ocs_agent_version: 2.1
+ocs_pkg: Ocsinventory-Unix-Agent-{ocs_agent_version}.tar.gz
 ocs_pkgreqs: (see `vars/{{ ansible_os_family }}.yml
 ocs_down_dir: /tmp
-ocs_down_url: https://launchpad.net/ocsinventory-unix-agent/stable-{ocs_version}/{ocs_version}/+download/
+ocs_down_url: https://launchpad.net/ocsinventory-unix-agent/stable-{ocs_stable_version}/{ocs_agent_version}/+download/
 ocs_server: ocsinventory-server.domain.name
 ocs_basedir: /var/lib/ocsinventory-agent
 ocs_configdir: /etc/ocsinventory
