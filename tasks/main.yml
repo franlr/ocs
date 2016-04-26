@@ -1,21 +1,20 @@
 ---
 # tasks file for ocs
 
-- name: add the OS specific varibles
+- name: add the OS specific variables
   include_vars: "{{ ansible_os_family }}.yml"
 
 - { include: Debian.yml, when: "ansible_os_family == 'Debian'" }
 - { include: RedHat.yml, when: "ansible_os_family == 'RedHat'" }
 
-- name: initialize CPAN installation
-  command: perl -MCPAN -e "my $c = \"CPAN::HandleConfig\"; $c->load(doit => 1, autoconfig => 1); $c->edit(prerequisites_policy => \"follow\"); $c->edit(build_requires_install_policy => \"yes\"); $c->commit"
-
-- name: installs Digest::MD5 using CPAN
+- name: initialize CPAN installation installs Digest::MD5 using CPAN
   command: "/usr/bin/perl -MCPAN -e 'install Digest::MD5'"
+  environment:
+    PERL_MM_USE_DEFAULT: 1
 
 - name: download tarball
   get_url: >
-    url="{{ ocs_down_url }}"/"{{ ocs_pkg }}"
+    url="{{ ocs_down_url }}"
     dest="{{ ocs_down_dir }}"
     force=no
     validate_certs=no
@@ -28,22 +27,52 @@
 
 - name: uncompress the tarball
   unarchive: >
-    src="{{ ocs_down_dir }}"/"{{ ocs_pkg }}" 
+    src="{{ ocs_down_dir }}"/"{{ ocs_pkg }}"
     dest=/opt/
     copy=no
     mode=0755
     owner=root
     group=root
 
+- name: configuration directory
+  file: >
+   path={{ ocs_configdir }}
+   state=directory
+   mode=755
+
+- name: HTTP URL
+  set_fact:
+    ocs_url=http://{{ ocs_server }}
+  when: ocs_ssl == false
+
+- name: HTTPS URL
+  set_fact:
+   ocs_url=https://{{ ocs_server }}
+   ocs_ca="--ca={{ ocs_configdir }}/cacert.pem"
+  when: ocs_ssl == true
+
+- name: Fetch SSL Certificate
+  local_action: shell echo -n | openssl s_client -connect {{ ocs_server }}:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/{{ ocs_server }}-cacert.pem
+  when: ocs_ssl == true
+
+- name: Move SSL Certificate to ocs_configdir
+  copy: >
+   src=/tmp/{{ ocs_server }}-cacert.pem
+   dest={{ ocs_configdir }}/cacert.pem
+  when: ocs_ssl == true
+
 - name: silent install ocs agent on target dir using COMMAND module
-  command: "chdir=/opt/{{ ocs_name }}-{{ ocs_agent_version }} {{ item }}"
+  command: "chdir=/opt/{{ ocs_archive }} {{ item }}"
   with_items:
     - perl Makefile.PL
     - make
     - make install clean
-    - perl postinst.pl --nowizard --server=http://{{ ocs_server }} --basevardir={{ ocs_basedir}} --configdir={{ ocs_configdir}} --tag={{ ocs_tag }} --logfile={{ ocs_logfile }} {{ ocs_options }}
+    - perl postinst.pl --nowizard --server={{ ocs_url }} --basevardir={{ ocs_basedir }} --configdir={{ ocs_configdir }} --tag={{ ocs_tag }} --logfile={{ ocs_logfile }} {{ ocs_options }} {{ ocs_ca }}
   environment:
     PATH: /usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/lib:/usr/local/lib:/opt:{{ ansible_env.PATH }}
     PERL_AUTOINSTALL: 1
   tags:
     - ocs_install_command
+  notify:
+    - remove_ocs_from_opt
+    - remove_ocs_from_tmp

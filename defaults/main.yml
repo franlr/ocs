@@ -2,14 +2,14 @@
 # defaults file for ocs
 
 ocs_name: "Ocsinventory-Unix-Agent"
-ocs_stable_version: "2.1"
-ocs_agent_version: "2.1"
-ocs_pkg: "Ocsinventory-Unix-Agent-{{ ocs_agent_version }}.tar.gz"
+ocs_agent_version: "2.1.1"
+ocs_archive: "{{ ocs_name }}-{{ ocs_agent_version }}"
+ocs_pkg: "{{ ocs_archive }}.tar.gz"
+ocs_down_url: "https://github.com/OCSInventory-NG/UnixAgent/releases/download/{{ ocs_agent_version }}/{{ ocs_pkg }}"
 ocs_down_dir: /tmp
-ocs_down_url: https://launchpad.net/ocsinventory-unix-agent/stable-{{ ocs_stable_version }}/{{ ocs_agent_version }}/+download/
 ocs_server: ocsinventory-server.domain.name
 ocs_basedir: /var/lib/ocsinventory-agent
 ocs_configdir: /etc/ocsinventory
 ocs_tag: srvtype
 ocs_logfile: /var/log/ocsinventory-agent.log
-ocs_options: --crontab --remove-old-linux-agent --debug --nossl --download --snmp --now
+ocs_options: --crontab --remove-old-linux-agent --debug --download --snmp --now
