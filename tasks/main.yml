@@ -69,7 +69,7 @@
     - perl Makefile.PL
     - make
     - make install clean
-    - perl postinst.pl --nowizard --server={{ ocs_url }} --basevardir={{ ocs_basedir }} --configdir={{ ocs_configdir }} --tag={{ ocs_tag }} --logfile={{ ocs_logfile }} {{ ocs_options }} {{ ocs_ca }}
+    - perl postinst.pl --nowizard --server={{ ocs_url }} --basevardir={{ ocs_basedir }} --configdir={{ ocs_configdir }} --tag={{ ocs_tag }} --logfile={{ ocs_logfile }} {{ ocs_final_options }} {{ ocs_ca }}
   environment:
     PATH: /usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/lib:/usr/local/lib:/opt:{{ ansible_env.PATH }}
     PERL_AUTOINSTALL: 1
