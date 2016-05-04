@@ -14,3 +14,4 @@ ocs_tag: srvtype
 ocs_logfile: /var/log/ocsinventory-agent.log
 ocs_options: --crontab --remove-old-linux-agent --debug --download --snmp --now
 ocs_ssl: false
+ocs_ca:
