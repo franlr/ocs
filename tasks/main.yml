@@ -59,7 +59,7 @@
   local_action: shell echo -n | openssl s_client -connect {{ ocs_server }}:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/{{ ocs_server }}-cacert.pem
   when: ocs_ssl == true
 
-- name: Move SSL Certificate to "{{ ocs_configdir }}"
+- name: Move SSL Certificate to ocs_configdir
   copy: >
    src=/tmp/{{ ocs_server }}-cacert.pem
    dest={{ ocs_configdir }}/cacert.pem
