@@ -20,7 +20,7 @@
     validate_certs=no
   register: get_ocsinventory_agent
 
-- name: debug download
+- name: Download status
   debug:
     msg="ocsinventory agent was downloaded"
   when: get_ocsinventory_agent|changed
@@ -57,6 +57,7 @@
 
 - name: Fetch SSL Certificate
   local_action: shell echo -n | openssl s_client -connect {{ ocs_server }}:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/{{ ocs_server }}-cacert.pem
+  sudo: no
   when: ocs_ssl == true
 
 - name: Move SSL Certificate to ocs_configdir
@@ -65,7 +66,7 @@
    dest={{ ocs_configdir }}/cacert.pem
   when: ocs_ssl == true
 
-- name: silent install ocs agent on target dir using COMMAND module
+- name: Silent install ocs agent on target dir using COMMAND module
   command: "chdir=/opt/{{ ocs_archive }} {{ item }}"
   with_items:
     - perl Makefile.PL
@@ -78,5 +79,6 @@
   tags:
     - ocs_install_command
   notify:
-    - remove_ocs_from_opt
-    - remove_ocs_from_tmp
+    - Remove OCS from opt
+    - Remove OCS from tmp
+    - Remote OCS SSL cert

@@ -1,7 +1,47 @@
 ---
 
-- name: install the required packages in RedHat derivatives
+- name: Set RedHat major version
+  set_fact: >
+    dist="rhel6"
+  when: (ansible_distribution == "Red Hat Enterprise Linux" or ansible_distribution == "CentOS") and
+         ansible_distribution_major_version == "6"
+
+- name: Set RedHat major version
+  set_fact: >
+    dist="rhel7"
+  when: (ansible_distribution == "Red Hat Enterprise Linux" or ansible_distribution == "CentOS") and
+         ansible_distribution_major_version == "7"
+
+- name: Get epel rpm from internet
+  get_url: >
+    url="{{ epel_repo_rhel6 }}"
+    dest="/tmp/"
+  when: dist == "rhel6"
+
+- name: Install epel rpm from a local file
+  yum: name=/tmp/epel-release-latest-6.noarch.rpm state=present
+  when: dist == "rhel6"
+
+- name: Get epel rpm from internet
+  get_url: >
+    url="{{ epel_repo_rhel7 }}"
+    dest="/tmp/"
+  when: dist == "rhel7"
+
+- name: Install epel rpm from a local file
+  yum: name=/tmp/epel-release-latest-7.noarch.rpm state=present
+  when: dist == "rhel7"
+
+- name: Install the required packages in RedHat derivatives
   yum: name="{{ item }}" state=installed
-  with_items: "{{ ocs_pkgreqs }}"
+  with_items: "{{ ocs_pkgreqs_rhel6 }}"
   tags:
     - ocs_pkgreqs
+  when: dist == "rhel6"
+
+- name: Install the required packages in RedHat derivatives
+  yum: name="{{ item }}" state=installed
+  with_items: "{{ ocs_pkgreqs_rhel7 }}"
+  tags:
+    - ocs_pkgreqs
+  when: dist == "rhel7"
