@@ -14,19 +14,15 @@
 
 - name: Get epel rpm from internet
   get_url: >
-    url="{{ epel_repo_rhel6 }}"
+    url="{{ epel_repo }}"
     dest="/tmp/"
-  when: dist == "rhel6"
+
+- name: debug
+  debug: msg={{ epel_repo }}
 
 - name: Install epel rpm from a local file
   yum: name=/tmp/epel-release-latest-6.noarch.rpm state=present
   when: dist == "rhel6"
-
-- name: Get epel rpm from internet
-  get_url: >
-    url="{{ epel_repo_rhel7 }}"
-    dest="/tmp/"
-  when: dist == "rhel7"
 
 - name: Install epel rpm from a local file
   yum: name=/tmp/epel-release-latest-7.noarch.rpm state=present
@@ -34,14 +30,6 @@
 
 - name: Install the required packages in RedHat derivatives
   yum: name="{{ item }}" state=installed
-  with_items: "{{ ocs_pkgreqs_rhel6 }}"
+  with_items: "{{ ocs_pkgreqs }}"
   tags:
     - ocs_pkgreqs
-  when: dist == "rhel6"
-
-- name: Install the required packages in RedHat derivatives
-  yum: name="{{ item }}" state=installed
-  with_items: "{{ ocs_pkgreqs_rhel7 }}"
-  tags:
-    - ocs_pkgreqs
-  when: dist == "rhel7"
