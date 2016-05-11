@@ -6,7 +6,7 @@
   when: ansible_os_family == 'Debian'
 
 - name: Add the OS specific variables
-  include_vars: "{{ ansible_os_family }}{{ ansible_major_version }}.yml"
+  include_vars: "{{ ansible_os_family }}{{ ansible_distribution_major_version }}.yml"
   when: ansible_os_family == 'RedHat'
 
 - include: Debian.yml

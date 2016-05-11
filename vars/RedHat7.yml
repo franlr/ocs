@@ -2,7 +2,7 @@
 
 epel_repo: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
-ocs_pkgreqs_rhel7:
+ocs_pkgreqs:
   - "@development-tools"
   - perl-CPAN
   - perl-XML-Simple
