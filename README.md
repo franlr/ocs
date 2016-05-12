@@ -8,9 +8,9 @@ An Ansible role for installing ocsinventory-agent.
 This role only works with the ocsinventory-agent 2.1 or later to let the agent be installed non-interactively (http://wiki.ocsinventory-ng.org/index.php/Documentation:UnixAgent).
 
 Tested on:
-- Ubuntu 14.04
-- CentOS 6
-- Debian 7
+- Ubuntu 14.04 and 16.04
+- CentOS 6 and 7
+- Debian 7 and 8
 
 Requirements
 ------------
@@ -25,6 +25,7 @@ A description of the settable variables for this role should go here, including 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
 ```
+---
 ocs_name: "Ocsinventory-Unix-Agent"
 ocs_agent_version: "2.1.1"
 ocs_archive: "{{ ocs_name }}-{{ ocs_agent_version }}"
@@ -37,6 +38,8 @@ ocs_configdir: /etc/ocsinventory
 ocs_tag: srvtype
 ocs_logfile: /var/log/ocsinventory-agent.log
 ocs_options: --crontab --remove-old-linux-agent --debug --download --snmp --now
+ocs_ssl: false
+ocs_ca:
 ```
 
 Dependencies
