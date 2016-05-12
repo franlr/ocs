@@ -25,6 +25,7 @@ A description of the settable variables for this role should go here, including 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
 ```
+---
 ocs_name: "Ocsinventory-Unix-Agent"
 ocs_agent_version: "2.1.1"
 ocs_archive: "{{ ocs_name }}-{{ ocs_agent_version }}"
@@ -37,6 +38,8 @@ ocs_configdir: /etc/ocsinventory
 ocs_tag: srvtype
 ocs_logfile: /var/log/ocsinventory-agent.log
 ocs_options: --crontab --remove-old-linux-agent --debug --download --snmp --now
+ocs_ssl: false
+ocs_ca:
 ```
 
 Dependencies
