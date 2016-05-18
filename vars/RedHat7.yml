@@ -1,5 +1,7 @@
 ---
 
+epel_repo: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+
 ocs_pkgreqs:
   - "@development-tools"
   - perl-CPAN
@@ -14,6 +16,7 @@ ocs_pkgreqs:
   - perl-Digest-Perl-MD5
   - perl-libwww-perl
   - perl-ExtUtils-MakeMaker
+  - perl-LWP-Protocol-https
   - pciutils
   - dmidecode
   - smartmontools

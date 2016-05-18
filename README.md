@@ -8,8 +8,9 @@ An Ansible role for installing ocsinventory-agent.
 This role only works with the ocsinventory-agent 2.1 or later to let the agent be installed non-interactively (http://wiki.ocsinventory-ng.org/index.php/Documentation:UnixAgent).
 
 Tested on:
-- Debian 7
-- CentOS 6
+- Ubuntu 14.04 and 16.04
+- CentOS 6 and 7
+- Debian 7 and 8
 
 Requirements
 ------------
@@ -24,18 +25,21 @@ A description of the settable variables for this role should go here, including 
 Available variables are listed below, along with default values (see `defaults/main.yml`):
 
 ```
-ocs_name: Ocsinventory-Unix-Agent
-ocs_stable_version: 2.1
-ocs_agent_version: 2.1
-ocs_pkg: Ocsinventory-Unix-Agent-{ocs_agent_version}.tar.gz
+---
+ocs_name: "Ocsinventory-Unix-Agent"
+ocs_agent_version: "2.1.1"
+ocs_archive: "{{ ocs_name }}-{{ ocs_agent_version }}"
+ocs_pkg: "{{ ocs_archive }}.tar.gz"
+ocs_down_url: "https://github.com/OCSInventory-NG/UnixAgent/releases/download/{{ ocs_agent_version }}/{{ ocs_pkg }}"
 ocs_down_dir: /tmp
-ocs_down_url: https://launchpad.net/ocsinventory-unix-agent/stable-{ocs_stable_version}/{ocs_agent_version}/+download/
 ocs_server: ocsinventory-server.domain.name
 ocs_basedir: /var/lib/ocsinventory-agent
 ocs_configdir: /etc/ocsinventory
 ocs_tag: srvtype
 ocs_logfile: /var/log/ocsinventory-agent.log
-ocs_options: --crontab --remove-old-linux-agent --debug --nossl --download --snmp --now
+ocs_options: --crontab --remove-old-linux-agent --debug --download --snmp --now
+ocs_ssl: false
+ocs_ca:
 ```
 
 Dependencies
@@ -52,10 +56,13 @@ How to use this role:
 ---
 - hosts: all
   gather_facts: true
-  sudo: no
-  user: root
+  sudo: yes
   roles:
-    - { role: "franlr.ocs", ocs_server: "your-ocsinventory-server.domain.name", ocs_tag: "your-tag" }
+    - ocs_agent
+  vars:
+    - ocs_server: ocs.mydomain.com
+    - ocs_ssl: true
+    - ocs_tag: "{{ ansible_hostname }}"
 ```
 
 License
@@ -67,3 +74,5 @@ Author Information
 ------------------
 
 This role was created in 2015 by [FranLR](https://github.com/franlr/)
+
+Updated by paulbsd
