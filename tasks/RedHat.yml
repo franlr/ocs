@@ -3,30 +3,39 @@
 - name: Set RedHat major version
   set_fact: >
     dist="rhel6"
-  when: (ansible_distribution == "Red Hat Enterprise Linux" or ansible_distribution == "CentOS") and
+  when: (ansible_distribution == "RedHat" or ansible_distribution == "CentOS") and
          ansible_distribution_major_version == "6"
 
 - name: Set RedHat major version
   set_fact: >
     dist="rhel7"
-  when: (ansible_distribution == "Red Hat Enterprise Linux" or ansible_distribution == "CentOS") and
+  when: (ansible_distribution == "RedHat" or ansible_distribution == "CentOS") and
          ansible_distribution_major_version == "7"
+
+- name: Check if epel repo is installed
+  yum_repository:
+    name: epel
+    state: absent
+  register: epel_install
+  check_mode: True
 
 - name: Get epel rpm from internet
   get_url: >
     url="{{ epel_repo }}"
     dest="/tmp/"
+  when: epel_install is defined and not epel_install|changed | default(True)
 
 - name: debug
   debug: msg={{ epel_repo }}
+  when: epel_install is defined and not epel_install|changed
 
 - name: Install epel rpm from a local file
   yum: name=/tmp/epel-release-latest-6.noarch.rpm state=present
-  when: dist == "rhel6"
+  when: epel_install is defined and not epel_install|changed  and dist == "rhel6"
 
 - name: Install epel rpm from a local file
   yum: name=/tmp/epel-release-latest-7.noarch.rpm state=present
-  when: dist == "rhel7"
+  when: epel_install is defined and not epel_install|changed  and dist == "rhel7"
 
 - name: Install the required packages in RedHat derivatives
   yum: name="{{ item }}" state=installed
